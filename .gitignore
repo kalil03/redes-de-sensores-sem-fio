@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+*.hex
+*.elf
+servidor/instance/
+logs/
+antigo/
+AGENTS.md
+CLAUDE.md
+links.txt

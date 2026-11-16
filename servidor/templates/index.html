@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bancada de sensores · Interfaces</title>
+<style>
+:root{color-scheme:light;--paper:#f5f4ef;--ink:#252923;--muted:#6e7269;--line:#d6d8ce;--green:#366344;--wash:#e8eddf;--red:#a24032}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:15px Arial,Helvetica,sans-serif}button,select{font:inherit;color:inherit}button:focus-visible,select:focus-visible{outline:2px solid var(--green);outline-offset:3px}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-variant-numeric:tabular-nums}.shell{max-width:1060px;margin:auto;padding:0 32px}.mast{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--ink);height:70px;font-size:12px}.brand{font-weight:700;letter-spacing:.1em}.mast span{color:var(--muted)}header{padding:38px 0 28px;display:flex;justify-content:space-between;gap:20px;align-items:flex-end}.kicker{text-transform:uppercase;letter-spacing:.12em;font-size:10px;font-weight:bold;color:var(--muted);margin:0 0 12px}h1{font-size:32px;letter-spacing:-1px;line-height:1.1;margin:0 0 12px;font-weight:500}.intro{color:var(--muted);margin:0;line-height:1.5}.connection{font-size:12px;white-space:nowrap;padding-bottom:3px;display:flex;align-items:center;gap:8px}.dot{width:7px;height:7px;background:var(--muted);display:inline-block;border-radius:50%}.connection[data-state=on] .dot{background:var(--green)}.connection[data-state=off] .dot{background:var(--red)}#erro{color:var(--red);font-size:13px;line-height:1.5}#erro:empty{display:none}.nodes{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}.node{padding:23px 25px 25px 0;min-width:0}.node+.node{border-left:1px solid var(--line);padding-left:28px}.node-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.node h2{font-size:14px;margin:0;font-weight:600}.tag{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:4px 6px}.reading{font-size:64px;letter-spacing:-4px;line-height:1.2;margin:27px 0 18px}.unit{font:16px Arial,sans-serif;letter-spacing:0;color:var(--muted);margin-left:8px}.reading.test{font-size:29px;letter-spacing:-1px;margin-top:40px;margin-bottom:30px;color:var(--muted)}.node-note{font-size:12px;color:var(--muted);margin:0;line-height:1.5}.node-note.stale{color:var(--red)}.node-bottom{display:flex;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:12px;font-size:11px;color:var(--muted)}.history-head{margin-top:35px;display:flex;justify-content:space-between;align-items:center;gap:20px}.history-head h2{font-size:18px;font-weight:500;margin:0}.history-head p{font-size:12px;color:var(--muted);margin:7px 0 0}select{background:transparent;border:1px solid var(--line);padding:8px 28px 8px 10px;font-size:12px;border-radius:0}.table-wrap{overflow:auto;margin-top:18px}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;white-space:nowrap}th{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:12px 14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}td{padding:13px 14px;border-bottom:1px solid var(--line)}th:first-child,td:first-child{padding-left:0}th:last-child,td:last-child{text-align:right;padding-right:0}tbody tr:hover{background:#eeeee6}.confirmed{color:var(--green)}.failed{color:var(--red)}.test-label{color:var(--muted)}.empty{color:var(--muted);padding:28px 0}footer{margin:28px 0;display:flex;justify-content:space-between;gap:20px;color:var(--muted);font-size:11px;line-height:1.7}footer p{margin:0;max-width:600px}.footer-code{white-space:nowrap} @media(max-width:600px){.shell{padding:0 18px}.mast{height:56px;font-size:10px}.mast .course{display:none}header{padding:28px 0 23px;display:block}h1{font-size:29px}.connection{margin-top:20px}.node{padding:18px 14px 18px 0}.node+.node{padding-left:15px;padding-right:0}.node-heading{align-items:flex-start;flex-direction:column;gap:8px}.reading{font-size:47px;letter-spacing:-3px;margin:24px 0 18px}.reading.test{font-size:23px;margin-top:32px;margin-bottom:29px}.node-bottom{flex-direction:column;gap:4px}.history-head{margin-top:28px}.history-head h2{font-size:17px}footer{display:block}.footer-code{margin-top:12px}}
+</style>
+</head>
+<body>
+<div class="shell">
+ <div class="mast"><div class="brand">INTERFACES <span>/ REDE nRF24</span></div><span class="course">UTFPR · CD36O</span></div>
+ <header>
+  <div><p class="kicker">HC-SR04 · nRF24L01</p><h1>Bancada de sensores</h1><p class="intro">Leituras dos nós e confirmação de entrega pelo gateway.</p></div>
+  <div class="connection" id="conexao" data-state="pending"><span class="dot"></span><span id="serial">Aguardando gateway</span></div>
+ </header>
+ <p id="erro" role="alert"></p>
+ <main>
+  <section class="nodes" id="nos" aria-label="Última leitura de cada nó"><p class="empty">Carregando leituras…</p></section>
+  <div class="history-head"><div><h2>Histórico de leituras</h2><p>Últimos 20 registros recebidos no computador.</p></div><label><span class="kicker" style="position:absolute;left:-10000px">Filtrar por nó</span><select id="filtro" aria-label="Filtrar por nó"><option value="">Todos os nós</option value="1">Nó 1</option><option value="2">Nó 2</option></select></label></div>
+  <div class="table-wrap"><table><thead><tr><th>Recebido às</th><th>Origem</th><th>Leitura</th><th>Repasse ao outro nó</th></tr></thead><tbody id="historico"></tbody></table></div>
+ </main>
+ <footer><p>Distâncias em passos de 2 cm. A confirmação indica que o outro nó respondeu ao repasse. Sem leitura válida, nenhuma distância é atribuída.</p><p class="mono footer-code">USB → GATEWAY → nRF24</p></footer>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+let historico=[];
+function el(tag,texto,classe){const e=document.createElement(tag);if(texto!==undefined)e.textContent=texto;if(classe)e.className=classe;return e;}
+function textoLeitura(r){return r.tipo==='teste'?`Contador ${r.valor}`:r.estado==='ok'?`${r.distancia_mm/10} cm`:'Sem leitura válida';}
+function renderHistorico(){
+ const no=$('#filtro').value;const rows=historico.filter(r=>!no||r.no===Number(no));const table=$('#historico');table.replaceChildren();
+ if(!rows.length){const tr=el('tr');const td=el('td','Nenhum registro recebido.','empty');td.colSpan=4;tr.append(td);table.append(tr);return;}
+ for(const r of rows){const tr=el('tr');tr.append(el('td',new Date(r.recebido_em).toLocaleTimeString('pt-BR'),'mono'),el('td',`Nó ${r.no}`),el('td',textoLeitura(r),r.tipo==='teste'?'mono test-label':'mono'),el('td',r.entregue?'Confirmado':'Sem confirmação',r.entregue?'confirmed':'failed'));table.append(tr);}
+}
+function renderNos(nodes){
+ const holder=$('#nos');holder.replaceChildren();
+ for(const n of nodes){
+  const r=n.ultima;const test=r?.tipo==='teste';const card=el('article',undefined,'node');const head=el('div',undefined,'node-heading');head.append(el('h2',`Nó ${String(n.no).padStart(2,'0')}`),el('span',!r?'Aguardando':test?'Modo de teste':'HC-SR04','tag'));
+  const value=el('p',undefined,'reading mono'+(test?' test':''));
+  if(!r)value.textContent='—';else if(test)value.textContent=`Teste ${r.valor}`;else if(r.estado!=='ok')value.textContent='—';else value.append(document.createTextNode(String(r.distancia_mm/10)),el('span','cm','unit'));
+  const text=!r?'Nenhum dado recebido.':test?'Sensor ainda não instalado.':r.estado!=='ok'?'Leitura inválida ou fora da faixa.':n.recente?'Última distância recebida.':'Leitura antiga. Verifique a conexão.';
+  const note=el('p',text,'node-note'+(r&&!n.recente?' stale':''));
+  const bottom=el('div',undefined,'node-bottom');bottom.append(el('span',r?`Recebido há ${n.idade_s} s`:'Sem registro','mono'),el('span',!r?'—':!n.recente?'Sem atualização':r.entregue?'Repasse confirmado':'Repasse não confirmado'));
+  card.append(head,value,note,el('div',undefined,'spacer'));card.lastChild.style.height='17px';card.append(bottom);holder.append(card);
+ }
+}
+$('#filtro').addEventListener('change',renderHistorico);
+async function atualizar(){
+ try{
+  const query=$('#filtro').value?'&no='+$('#filtro').value:'';
+  const responses=await Promise.all([fetch('/api/status'),fetch('/api/leituras?limite=20'+query)]);
+  if(responses.some(r=>!r.ok))throw Error('Falha ao consultar o servidor.');
+  const [status,rows]=await Promise.all(responses.map(r=>r.json()));
+  $('#erro').textContent='';$('#conexao').dataset.state=status.serial.conectado?'on':'off';$('#serial').textContent=status.serial.conectado?'Gateway conectado':'Gateway desconectado';renderNos(status.nos);historico=rows;renderHistorico();
+ }catch(e){$('#conexao').dataset.state='off';$('#serial').textContent='Sem conexão com o servidor';$('#erro').textContent='Não foi possível atualizar as leituras. Os valores exibidos podem estar antigos.';}
+ finally{setTimeout(atualizar,2000);}
+}
+atualizar();
+</script>
+</body>
+</html>
